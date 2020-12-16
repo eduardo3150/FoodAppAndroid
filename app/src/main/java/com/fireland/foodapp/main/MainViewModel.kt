@@ -4,15 +4,24 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.fireland.foodapp.BR
-import com.fireland.foodapp.network.HttpProvider
+import com.fireland.foodapp.helper.Resource
+import com.fireland.foodapp.network.FoodService
+import kotlinx.coroutines.Dispatchers
 
-class MainViewModel @ViewModelInject constructor(private val httpProvider: HttpProvider) :
+class MainViewModel @ViewModelInject constructor(private val foodService: FoodService) :
     ViewModel() {
     var recipeData = RecipeData()
 
-    fun getRecipesList() {
-        recipeData.title = httpProvider.getRecipes()
+    fun getRecipesList() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = foodService.getRecipes()))
+            recipeData.title = foodService.getRecipes().recipes[0].title
+        } catch (exception: Exception) {
+            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
+        }
     }
 }
 
