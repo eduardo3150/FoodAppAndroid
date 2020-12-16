@@ -1,7 +1,7 @@
 package com.fireland.foodapp.di
 
-import com.fireland.foodapp.network.HttpProvider
-import com.fireland.foodapp.network.HttpProviderImpl
+import com.fireland.foodapp.network.FoodService
+import com.fireland.foodapp.network.FoodServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import dagger.hilt.android.components.ActivityComponent
 abstract class NetworkModule {
 
     @Binds
-    abstract fun bindHttpProvider(httpProviderImpl: HttpProviderImpl): HttpProvider
+    abstract fun bindFoodService(foodServiceImpl: FoodServiceImpl): FoodService
 }
